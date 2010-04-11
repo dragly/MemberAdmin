@@ -42,7 +42,8 @@ class MemberAdmin {
             "</th><th>" . __("E-mail") . 
 			"</th><th>" . __("Location") .
 			"</th><th>" . __("Birthdate") .
-			"</th><th>" . __("Gender") . "</th>";
+			"</th><th>" . __("Gender") . 
+			"</th><th>" . __("") . "</th>";
     }
     function memberadmin_menu() {
 	    add_options_page('MemberAdmin Options', 'MemberAdmin', 'administrator', 'memberadmin-menu', array($this, 'memberadmin_options'));
@@ -118,17 +119,22 @@ class MemberAdmin {
 					$member = $this->select_member($id);
 				?>
 					<tr class="alternate">
-						<td class="username column-username"><?php print get_avatar( $member->email, 32 ); ?><?php print $member->first_name ?></td>
-						<td><?php print $member->last_name ?></td>
-						<td><?php print $member->email ?></td>
-						<td><?php print $member->location ?></td>
-						<td><?php print $member->birthdate ?></td>
-						<td><?php print $member->gender ?></td>
+					<form action="<?php print $_SERVER['REQUEST_URI'];?>" method="GET">
+						<td class="username column-username"><?php print get_avatar( $member->email, 32 ); ?><input type="text" name="first_name" value="<?php print $member->first_name ?>" /></td>
+						<td><input type="text" name="last_name" value="<?php print $member->last_name ?>" /></td>
+						<td><input type="text" name="email" value="<?php print $member->email ?>" /></td>
+						<td><input type="text" name="location" value="<?php print $member->location ?>" /></td>
+						<td><input type="text" name="birthdate" value="<?php print $member->birthdate ?>" /></td>
+						<td><input type="text" name="gender" value="<?php print $member->gender ?>" /><input type="text" name="mode" value="save" readonly="readonly" style="visibility:hidden;" /></td>
+						<td><button type="submit" value="Save" /></td>
+					</form>
 					</tr> 
 				</tbody>
             </table>
 			<?php
 			echo '</div>';
+		break;
+		case "save":
 		break;
         }
     }
