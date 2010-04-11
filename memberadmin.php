@@ -3,11 +3,11 @@
 Plugin Name: MemberAdmin
 Plugin URI: http://code.google.com/p/memberadmin/
 Description: A member database administration plugin.
-Version: 0.1
-Author: Daniel Perez and Svenn-Arne Dragly
+Version: 0.2.0.5
+Author: Daniel Perez, Svenn-Arne Dragly and Thor Erik Lie
 Author URI: http://code.google.com/p/memberadmin/
-*/
-/*  Copyright 2010 Daniel Perez and Svenn-Arne Dragly  (email : hnnashikama@gmail.com, s@dragly.com)
+
+Copyright 2010 Daniel Perez, Svenn-Arne Dragly and Thor Erik Lie (email : hnnashikama@gmail.com, s@dragly.com, thorerik.lie@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 3 or later, as 
@@ -22,8 +22,6 @@ Author URI: http://code.google.com/p/memberadmin/
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-?>
-<?php
 
 
 class MemberAdmin {
@@ -38,7 +36,14 @@ class MemberAdmin {
             "</th><th>" . __("Last Name") . 
             "</th><th>" . __("E-mail") . "</th>";
     }
-
+    function print_list_headers_edit() {
+        print "<th>" . __("First Name") . 
+            "</th><th>" . __("Last Name") . 
+            "</th><th>" . __("E-mail") . 
+			"</th><th>" . __("Location") .
+			"</th><th>" . __("Birthdate") .
+			"</th><th>" . __("Gender") . "</th>";
+    }
     function memberadmin_menu() {
 	    add_options_page('MemberAdmin Options', 'MemberAdmin', 'administrator', 'memberadmin-menu', array($this, 'memberadmin_options'));
     }
@@ -47,14 +52,20 @@ class MemberAdmin {
         global $wpdb;
         return $wpdb->get_results("SELECT * FROM " . $this->prefix . "members");
     }
-
+	function select_member($id) {
+		global $wpdb;
+		return $wpdb->get_results("SELECT * FROM " . $this->prefix . "members WHERE id = " . $id);
+	}
     function memberadmin_options() {
-        $mode = (isset($_GET['mode'])) ? $_GET['mode'] : "default";
-        if($mode == "default") {
+	
+		switch($_GET['mode'])
+		{
+        case "default":
+		default:
             global $wpdb;
             echo '<div class="wrap">';
             ?>
-            <h2><?php _e("Members") ?><a href="user-new.php" class="button add-new-h2">Add New</a> </h2>
+            <h2><?php _e("Members") ?></h2><a href="user-new.php" class="button add-new-h2">Add New</a>
             <table class="widefat fixed" cellspacing="0">
             <thead>
             <tr class="thead">
@@ -78,7 +89,7 @@ class MemberAdmin {
                 ?>
                 <tr <?php print $style; ?>>
                 <td class="username column-username"><?php print get_avatar( $member->email, 32 ); ?><?php print $member->first_name ?><div class="row-actions">
-                    <span class='edit'><a href="<?php print $_SERVER['REQUEST_URI'] ?>&amp;mode=edit&amp;id=<?php print $member-id ?>">Edit</a></span>
+                    <span class='button edit'><a href="<?php print $_SERVER['REQUEST_URI'] ?>&amp;mode=edit&amp;id=<?php print $member->id ?>">Edit</a></span>
                 </div></td>
                 <td><?php print $member->last_name ?></td>
                 <td><?php print $member->email ?></td>
@@ -90,10 +101,35 @@ class MemberAdmin {
             </table>
             <?php
             echo '</div>';
-        } elseif($mode=="edit") {
-            include("member-edit.php");
-        } else {
-            print "Baaaah";
+        break;
+		case "edit":
+            echo '<div class="wrap">';
+			?>
+			<table class="widefat fixed" cellspacing="0">
+				<thead>
+					<tr class="thead">
+					<?php
+						$this->print_list_headers_edit();
+					?>
+					</tr>
+				</thead>
+				<tbody>
+				<?php
+					$member = $this->select_member($id);
+				?>
+					<tr class="alternate">
+						<td class="username column-username"><?php print get_avatar( $member->email, 32 ); ?><?php print $member->first_name ?></td>
+						<td><?php print $member->last_name ?></td>
+						<td><?php print $member->email ?></td>
+						<td><?php print $member->location ?></td>
+						<td><?php print $member->birthdate ?></td>
+						<td><?php print $member->gender ?></td>
+					</tr> 
+				</tbody>
+            </table>
+			<?php
+			echo '</div>';
+		break;
         }
     }
 };
