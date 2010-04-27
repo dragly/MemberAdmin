@@ -1,5 +1,5 @@
 <?php
-/* this file is obsolete
+/* 
 Plugin Name: MemberAdmin
 Plugin URI: http://code.google.com/p/memberadmin/
 Description: A member database administration plugin.
