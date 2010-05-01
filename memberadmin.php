@@ -3,7 +3,8 @@
 Plugin Name: MemberAdmin
 Plugin URI: http://code.google.com/p/memberadmin/
 Description: A member database administration plugin.
-Version: 0.2.0.5
+Version: 0.2.0
+* File-Version: 0.0.1.0002
 Author: Daniel Perez, Svenn-Arne Dragly and Thor Erik Lie
 Author URI: http://code.google.com/p/memberadmin/
 
@@ -59,82 +60,17 @@ class MemberAdmin {
 	}
     function memberadmin_options() {
 	
+		global $wpdb;
 		switch($_GET['mode'])
 		{
         case "default":
 		default:
-            global $wpdb;
-            echo '<div class="wrap">';
-            ?>
-            <h2><?php _e("Members") ?></h2><a href="user-new.php" class="button add-new-h2">Add New</a>
-            <table class="widefat fixed" cellspacing="0">
-            <thead>
-            <tr class="thead">
-            <?php
-            $this->print_list_headers();
-            ?>
-            </tr>
-            </thead>
-            <tfoot>
-            <tr class="thead">
-            <?php
-            $this->print_list_headers();
-            ?>
-            </tr>
-            </tfoot>
-            <tbody>
-            <?php
-            $style = '';
-            foreach ($this->search_members() as $member) {
-                $style = ( ' class="alternate"' == $style ) ? '' : ' class="alternate"';
-                ?>
-                <tr <?php print $style; ?>>
-                <td class="username column-username"><?php print get_avatar( $member->email, 32 ); ?><?php print $member->first_name ?><div class="row-actions">
-                    <span class='button edit'><a href="<?php print $_SERVER['REQUEST_URI'] ?>&amp;mode=edit&amp;id=<?php print $member->id ?>">Edit</a></span>
-                </div></td>
-                <td><?php print $member->last_name ?></td>
-                <td><?php print $member->email ?></td>
-                </tr>
-                <?php
-            }
-            ?> 
-            </tbody>
-            </table>
-            <?php
-            echo '</div>';
+            include 'member-show.php';
         break;
-		case "edit":
-            echo '<div class="wrap">';
-			?>
-			<table class="widefat fixed" cellspacing="0">
-				<thead>
-					<tr class="thead">
-					<?php
-						$this->print_list_headers_edit();
-					?>
-					</tr>
-				</thead>
-				<tbody>
-				<?php
-					$member = $this->select_member($id);
-				?>
-					<tr class="alternate">
-					<form action="<?php print $_SERVER['REQUEST_URI'];?>" method="GET">
-						<td class="username column-username"><?php print get_avatar( $member->email, 32 ); ?><input type="text" name="first_name" value="<?php print $member->first_name ?>" /></td>
-						<td><input type="text" name="last_name" value="<?php print $member->last_name ?>" /></td>
-						<td><input type="text" name="email" value="<?php print $member->email ?>" /></td>
-						<td><input type="text" name="location" value="<?php print $member->location ?>" /></td>
-						<td><input type="text" name="birthdate" value="<?php print $member->birthdate ?>" /></td>
-						<td><input type="text" name="gender" value="<?php print $member->gender ?>" /><input type="text" name="mode" value="save" readonly="readonly" style="visibility:hidden;" /></td>
-						<td><button type="submit" value="Save" /></td>
-					</form>
-					</tr> 
-				</tbody>
-            </table>
-			<?php
-			echo '</div>';
+		case 'edit':
+			include 'member-edit.php';
 		break;
-		case "save":
+		case 'save':
 		break;
         }
     }
