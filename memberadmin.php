@@ -71,6 +71,7 @@ class MemberAdmin {
 			include 'member-edit.php';
 		break;
 		case 'save':
+			// insert cleansing and saving functions here, no include...
 		break;
         }
     }
