@@ -32,12 +32,12 @@ class MemberAdmin {
         global $wpdb;
         $this->prefix = $wpdb->prefix . "mbdb_";
     }
-    function print_list_headers() {
+    public function print_list_headers() {
         print "<th>" . __("First Name") . 
             "</th><th>" . __("Last Name") . 
             "</th><th>" . __("E-mail") . "</th>";
     }
-    function print_list_headers_edit() {
+    public function print_list_headers_edit() {
         print "<th>" . __("First Name") . 
             "</th><th>" . __("Last Name") . 
             "</th><th>" . __("E-mail") . 
@@ -50,13 +50,16 @@ class MemberAdmin {
 	    add_options_page('MemberAdmin Options', 'MemberAdmin', 'administrator', 'memberadmin-menu', array($this, 'memberadmin_options'));
     }
     
-    function search_members() {
+    public function search_members() {
         global $wpdb;
         return $wpdb->get_results("SELECT * FROM " . $this->prefix . "members");
     }
-	function select_member($id) {
+	public function select_member($id) {
 		global $wpdb;
 		return $wpdb->get_results("SELECT * FROM " . $this->prefix . "members WHERE id = " . $id);
+	}
+	private function cleanse_data($data) {
+		
 	}
     function memberadmin_options() {
 	

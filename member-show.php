@@ -1,10 +1,7 @@
   <?php
   /*
-Plugin Name: MemberAdmin
-Plugin URI: http://code.google.com/p/memberadmin/
-Description: A member database administration plugin.
-Version: 0.2.0
 * File-Version: 0.0.1.0001
+* Plugin: memberadmin
 Author: Daniel Perez, Svenn-Arne Dragly and Thor Erik Lie
 Author URI: http://code.google.com/p/memberadmin/
 
